@@ -1,0 +1,10 @@
+.idea
+tmp
+log/mysql/
+log/nginx/
+log/php/
+log/php-fpm/
+log/redis/
+mysql
+project/
+redis/
