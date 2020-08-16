@@ -5,6 +5,7 @@ log/nginx/
 log/php/
 log/php-fpm/
 log/redis/
+log/rabbitmq/
 mysql
 project/
 redis/

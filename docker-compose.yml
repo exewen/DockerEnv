@@ -16,7 +16,7 @@ services:
       - ./nginx/ssl:/etc/nginx/ssl:rw
       - ./log/nginx:/var/log/nginx:rw
     environment:
-     - TZ=${NGINX_TZ}
+      - TZ=${NGINX_TZ}
     links:
       - php
     networks:
@@ -63,13 +63,28 @@ services:
     volumes:
       - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
       #- ./redis/data:/data:rw
-    #environment:
+      #environment:
       #- REDIS_HOST=${REDIS_HOST}
       #- REDIS_PASSWORD=123456
       #- TZ=${REDIS_TZ}
     entrypoint: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     ports:
       - "6379:6379"
+    networks:
+      - default-network
+  rabbitmq:
+    image: rabbitmq:3.8.3-management
+    container_name: rabbitmq
+    restart: always
+    volumes:
+    #- ./rabbitmq:/var/lib/rabbitmq
+    - ./log/rabbitmq:/var/log/rabbitmq:rw
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - 15672:15672
+      - 5672:5672
     networks:
       - default-network
 networks:
