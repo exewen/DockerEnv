@@ -34,8 +34,8 @@ services:
       - ./log/php:/var/log/php:rw
       #- ./php-fpm/git_ssh/known_hosts:/root/.ssh/known_hosts:rw
     links:
-      - mysql:${MYSQL_HOST}
-      - redis:${REDIS_HOST}
+      - mysql:mysql
+      - redis:redis
     expose:
       - "9000"
     networks:
@@ -44,8 +44,12 @@ services:
     image: mysql:5.7
     container_name: mysql
     restart: always
+    volumes:
+      - ./mysql/conf/my.cnf:/etc/mysql/my.cnf
+      - ./mysql/logs:/var/log/mysql:rw
+      - ./mysql/data:/var/lib/mysql:rw
     environment:
-      - MYSQL_HOST=${MYSQL_HOST}
+      #- MYSQL_HOST=${MYSQL_HOST}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - TZ=${MYSQL_TZ}
     ports:
@@ -57,12 +61,12 @@ services:
     container_name: redis
     restart: always
     volumes:
-      #- ./redis/conf/redis.conf:/etc/redis/redis.conf
-      - ./redis/data:/data:rw
-    environment:
-      - REDIS_HOST=${REDIS_HOST}
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
-      - TZ=${REDIS_TZ}
+      - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      #- ./redis/data:/data:rw
+    #environment:
+      #- REDIS_HOST=${REDIS_HOST}
+      #- REDIS_PASSWORD=123456
+      #- TZ=${REDIS_TZ}
     entrypoint: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     ports:
       - "6379:6379"
