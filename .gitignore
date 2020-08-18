@@ -9,3 +9,4 @@ log/rabbitmq/
 mysql
 project/
 redis/
+images/
