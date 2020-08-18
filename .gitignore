@@ -8,5 +8,5 @@ log/redis/
 log/rabbitmq/
 mysql
 project/
-redis/
+redis/data
 images/
