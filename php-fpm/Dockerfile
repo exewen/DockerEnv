@@ -33,4 +33,24 @@ RUN mkdir -p /usr/src/php/ext/redis \
     && curl -L https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz | tar xvz -C /usr/src/php/ext/redis --strip 1 \
     && echo 'redis' >> /usr/src/php-available-exts \
     && docker-php-ext-install redis
+#安装 PHP的AMQP扩展
+#RUN mkdir -p /usr/src/rabbitmq-c \
+#    && curl -L https://github.com/alanxz/rabbitmq-c/releases/download/v0.8.0/rabbitmq-c-0.8.0.tar.gz | tar xvz -C /usr/src/rabbitmq-c --strip 1 \
+#    && cd /usr/src/rabbitmq-c \
+#    && ./configure --prefix=/usr/local/rabbitmq-c \
+#    && make && make install
+#RUN mkdir -p /usr/src/php/ext/amqp
+#    && curl -L https://pecl.php.net/get/amqp-1.9.3.tgz | tar xvz -C /usr/src/php/ext/amqp --strip 1 \
+#    && echo 'amqp' >> /usr/src/php-available-exts \
+#    && cp /usr/src/rabbitmq-c/librabbitmq/amqp_ssl_socket.h /usr/src/php/ext/amqp/ \
+#    && docker-php-ext-configure amqp --with-librabbitmq-dir=/usr/local/rabbitmq-c \
+#    && docker-php-ext-install amqp \
+#    && php -m | grep amqp
+
+#安装 PHP的Xdebug扩展
+ENV PHPXDEBUG_VERSION 2.8.1
+RUN mkdir -p /usr/src/php/ext/xdebug \
+    && curl -L http://xdebug.org/files/xdebug-${PHPXDEBUG_VERSION}.tgz | tar xvz -C /usr/src/php/ext/xdebug --strip 1 \
+    && echo 'xdebug' >> /usr/src/php-available-exts \
+    && docker-php-ext-install xdebug
 CMD ["php-fpm", "-F"]
