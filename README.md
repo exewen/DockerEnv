@@ -1,4 +1,15 @@
 # DockerEnv
+### 使用说明
+~~~
+# 重构镜像
+docker-compose up --build
+# 启动
+docker-compose up -d
+# 关闭
+docker-compose down
+# 重启
+docker-compose restart
+~~~
 ### 进入容器
 ~~~
 docker exec -it php /bin/bash
