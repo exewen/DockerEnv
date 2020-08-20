@@ -23,7 +23,7 @@ echo "deb http://mirrors.163.com/debian-security/ jessie/updates main non-free c
 echo "deb-src http://mirrors.163.com/debian-security/ jessie/updates main non-free contrib" >>/etc/apt/sources.list &&
 apt-get update &&
 apt-get install vim -y &&
-echo 'alias ll='ls $LS_OPTIONS -l'' >>~/.bashrc &&
+echo "alias ll='ls \$LS_OPTIONS -l'" >>~/.bashrc &&
 source ~/.bashrc;
 
 #cat /etc/issue

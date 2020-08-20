@@ -1,5 +1,5 @@
 FROM php:7.0.13-fpm as php
-# 切换源
+# 切换源&&新增ll
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak \
     && echo "deb http://mirrors.163.com/debian/ jessie main non-free contrib" >>/etc/apt/sources.list \
     && echo "deb http://mirrors.163.com/debian/ jessie-updates main non-free contrib" >>/etc/apt/sources.list \
@@ -10,7 +10,10 @@ RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak \
     && echo "deb http://mirrors.163.com/debian-security/ jessie/updates main non-free contrib" >>/etc/apt/sources.list \
     && echo "deb-src http://mirrors.163.com/debian-security/ jessie/updates main non-free contrib" >>/etc/apt/sources.list \
     && apt-get update \
-    && apt-get install vim -y
+    && apt-get install vim -y \
+    && echo "alias ll='ls \$LS_OPTIONS -l'" >>~/.bashrc \
+    #&& source ~/.bashrc
+    && /bin/bash -c "source ~/.bashrc"
 # 安装扩展
 RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
