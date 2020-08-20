@@ -41,3 +41,11 @@ echo "deb-src http://mirrors.aliyun.com/debian/ buster-backports main non-free c
 apt-get update &&
 apt-get install vim -y;
 ~~~
+
+~~~
+# 推送
+docker tag dockerenv_nginx:latest exewen/nginx:1.18.0
+docker push exewen/nginx
+docker tag dockerenv_php:latest exewen/php-fpm:7.0.13
+docker push exewen/php-fpm
+~~~
