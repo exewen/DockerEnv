@@ -19,7 +19,8 @@ services:
     environment:
       - TZ=${NGINX_TZ}
     links:
-      - php
+      # 指定服务名称:别名
+      - php:php
     networks:
       - default-network
   php:
@@ -37,6 +38,7 @@ services:
     links:
       - mysql:mysql
       - redis:redis
+      - rabbitmq:rabbitmq
     expose:
       - "9000"
     networks:
