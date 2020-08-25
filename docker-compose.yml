@@ -65,13 +65,14 @@ services:
     container_name: redis
     restart: always
     volumes:
-      - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
-      #- ./redis/data:/data:rw
+      #- ./redis/conf/redis.conf:/etc/redis/redis.conf
+      - ./redis/data:/data:rw
+      - ./log/redis:/var/log/redis/:rw
       #environment:
       #- REDIS_HOST=${REDIS_HOST}
       #- REDIS_PASSWORD=123456
       #- TZ=${REDIS_TZ}
-    entrypoint: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    #entrypoint: ["redis-server", "/etc/redis/redis.conf"]
     ports:
       - "6379:6379"
     networks:
@@ -83,6 +84,7 @@ services:
     volumes:
       #- ./rabbitmq:/var/lib/rabbitmq
       - ./log/rabbitmq:/var/log/rabbitmq:rw
+      - ./rabbitmq/mnesia:/var/lib/rabbitmq/mnesia:rw
     environment:
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}

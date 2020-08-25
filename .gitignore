@@ -10,3 +10,5 @@ mysql
 project/
 redis/data
 images/
+rabbitmq/mnesia
+redis/dump.rdb
