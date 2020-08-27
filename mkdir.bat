@@ -1,0 +1,13 @@
+mkdir tmp
+mkdir log/mysql
+mkdir log/nginx
+mkdir log/php
+mkdir log/php-fpm
+mkdir log/redis
+mkdir log/rabbitmq
+mkdir mysql
+mkdir project
+mkdir redis/data
+mkdir images
+mkdir rabbitmq/mnesia
+mkdir redis

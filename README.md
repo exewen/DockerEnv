@@ -1,6 +1,10 @@
 # DockerEnv
 ### 使用说明
 ~~~
+# 初始化文件目录
+mkdir.bat
+# 导入镜像
+save_img.bat
 # 重构镜像
 docker-compose up --build
 # 启动
