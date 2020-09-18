@@ -8,6 +8,8 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    dns:
+      - 223.5.5.5
     volumes:
       #- ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/conf.d:/etc/nginx/conf.d/
@@ -38,9 +40,11 @@ services:
     links:
       - mysql:mysql
       - redis:redis
-      - rabbitmq:rabbitmq
+#      - rabbitmq:rabbitmq
     expose:
       - "9000"
+    dns:
+      - 223.5.5.5
     networks:
       - default-network
   mysql:
@@ -57,6 +61,8 @@ services:
       - TZ=${MYSQL_TZ}
     ports:
       - "3306:3306"
+    dns:
+      - 223.5.5.5
     networks:
       - default-network
   redis:
@@ -75,24 +81,27 @@ services:
     #entrypoint: ["redis-server", "/etc/redis/redis.conf"]
     ports:
       - "6379:6379"
+    dns:
+      - 223.5.5.5
     networks:
       - default-network
-  rabbitmq:
-    image: rabbitmq:3.8.3-management
-    container_name: rabbitmq
-    restart: always
-    volumes:
-      #- ./rabbitmq:/var/lib/rabbitmq
-      - ./log/rabbitmq:/var/log/rabbitmq:rw
-      - ./rabbitmq/mnesia:/var/lib/rabbitmq/mnesia:rw
-    environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
-    ports:
-      - 15672:15672
-      - 5672:5672
-    networks:
-      - default-network
+#  rabbitmq:
+#    image: rabbitmq:3.8.3-management
+#    container_name: rabbitmq
+#    restart: always
+#    volumes:
+#      #- ./rabbitmq:/var/lib/rabbitmq
+#      - ./log/rabbitmq:/var/log/rabbitmq:rw
+#      - ./rabbitmq/mnesia:/var/lib/rabbitmq/mnesia:rw
+#    environment:
+#      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+#      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+#    ports:
+#      - 15672:15672
+#      - 5672:5672
+#    networks:
+#      - default-network
 networks:
   default-network:
     driver: bridge
+
