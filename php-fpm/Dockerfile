@@ -56,9 +56,9 @@ RUN mkdir -p /usr/src/php/ext/redis \
 #    && php -m | grep amqp
 
 #安装 PHP的Xdebug扩展
-ENV PHPXDEBUG_VERSION 2.8.1
-RUN mkdir -p /usr/src/php/ext/xdebug \
-    && curl -L http://xdebug.org/files/xdebug-${PHPXDEBUG_VERSION}.tgz | tar xvz -C /usr/src/php/ext/xdebug --strip 1 \
-    && echo 'xdebug' >> /usr/src/php-available-exts \
-    && docker-php-ext-install xdebug
-CMD ["php-fpm", "-F"]
+#ENV PHPXDEBUG_VERSION 2.8.1
+#RUN mkdir -p /usr/src/php/ext/xdebug \
+#    && curl -L http://xdebug.org/files/xdebug-${PHPXDEBUG_VERSION}.tgz | tar xvz -C /usr/src/php/ext/xdebug --strip 1 \
+#    && echo 'xdebug' >> /usr/src/php-available-exts \
+#    && docker-php-ext-install xdebug
+#CMD ["php-fpm", "-F"]
