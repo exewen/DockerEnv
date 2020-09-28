@@ -27,7 +27,7 @@ RUN apt-get update && apt-get install -y \
         --no-install-recommends && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install -j$(nproc) \
         iconv mcrypt gettext curl mysqli pdo pdo_mysql zip \
-        mbstring bcmath opcache xml simplexml sockets hash soap \
+        mbstring bcmath opcache xml simplexml sockets hash soap xmlwriter \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd
 # 安装imap扩展
@@ -41,6 +41,12 @@ RUN mkdir -p /usr/src/php/ext/redis \
     && curl -L https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz | tar xvz -C /usr/src/php/ext/redis --strip 1 \
     && echo 'redis' >> /usr/src/php-available-exts \
     && docker-php-ext-install redis
+#安装 PHP的xlswriter扩展
+ENV XLSWRITER 1.2.7
+RUN mkdir -p /usr/src/php/ext/xlswriter \
+    && curl -L https://pecl.php.net/get/xlswriter-1.2.7.tgz | tar xvz -C /usr/src/php/ext/xlswriter --strip 1 \
+    && echo 'xlswriter' >> /usr/src/php-available-exts \
+    && docker-php-ext-install xlswriter
 #安装 PHP的AMQP扩展
 #RUN mkdir -p /usr/src/rabbitmq-c \
 #    && curl -L https://github.com/alanxz/rabbitmq-c/releases/download/v0.8.0/rabbitmq-c-0.8.0.tar.gz | tar xvz -C /usr/src/rabbitmq-c --strip 1 \
