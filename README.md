@@ -20,7 +20,9 @@ docker exec -it php /bin/bash
 ~~~
 ### 容器文件复制
 ~~~
-docker cp php:/usr/local/etc/php-fpm.conf.default D:\
+docker cp fpm74:/usr/local/etc/php/php.ini-development D:\DockerEnv\php74-fpm\php.ini
+docker cp fpm74:/usr/local/etc/php-fpm.conf D:\DockerEnv\php74-fpm\php-fpm.conf
+docker cp fpm74:/usr/local/etc/php-fpm.d/www.conf D:\DockerEnv\php74-fpm\php-fpm.d\www.conf
 ~~~
 
 ### 推送H

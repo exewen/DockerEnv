@@ -1,15 +1,15 @@
 version: "3"
 services:
   nginx:
-    # image: nginx:1.18.0
     build: ./nginx
     container_name: nginx
     restart: always
     ports:
       - "80:80"
       - "443:443"
+    dns:
+      - ${DOCKER_DNS}
     volumes:
-      #- ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/conf.d:/etc/nginx/conf.d/
       - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/conf/fastcgi.conf:/etc/nginx/fastcgi.conf
@@ -19,13 +19,14 @@ services:
     environment:
       - TZ=${NGINX_TZ}
     links:
-      # 指定服务名称:别名
-      - php:php
+      # 指定服务名称:别名(给了container_name就不需要别名 比如php74:fpm74)
+      - php
+      - php74
     networks:
       - default-network
   php:
     build: ./php-fpm
-    container_name: php
+    container_name: fpm
     restart: always
     volumes:
       - ./project:/var/www:rw
@@ -34,18 +35,36 @@ services:
       - ./php-fpm/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
       - ./log/php-fpm:/var/log/php-fpm:rw
       - ./log/php:/var/log/php:rw
-      #- ./php-fpm/git_ssh/known_hosts:/root/.ssh/known_hosts:rw
     links:
-      - mysql:mysql
-      - redis:redis
-      - rabbitmq:rabbitmq
+      - mysql
+      - redis
     expose:
       - "9000"
+    dns:
+      - ${DOCKER_DNS}
+    networks:
+      - default-network
+  php74:
+    build: ./php74-fpm
+    container_name: fpm74
+    restart: always
+    volumes:
+      - ./project:/var/www:rw
+      - ./php-fpm74/php.ini:/usr/local/etc/php/php.ini
+      - ./php-fpm74/php-fpm.conf:/usr/local/etc/php-fpm.conf
+      - ./php-fpm74/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
+    links:
+      - mysql
+      - redis
+    expose:
+      - "9000"
+    dns:
+      - ${DOCKER_DNS}
     networks:
       - default-network
   mysql:
     image: mysql:5.7
-    container_name: mysql
+    container_name: mysql57
     restart: always
     volumes:
       - ./mysql/conf/my.cnf:/etc/mysql/my.cnf
@@ -57,12 +76,14 @@ services:
       - TZ=${MYSQL_TZ}
     ports:
       - "3306:3306"
+    dns:
+      - ${DOCKER_DNS}
     networks:
       - default-network
   redis:
     #image: redis:5.0.8
     image: redis:3.2.12
-    container_name: redis
+    container_name: redis32
     restart: always
     volumes:
       #- ./redis/conf/redis.conf:/etc/redis/redis.conf
@@ -75,24 +96,27 @@ services:
     #entrypoint: ["redis-server", "/etc/redis/redis.conf"]
     ports:
       - "6379:6379"
+    dns:
+      - ${DOCKER_DNS}
     networks:
       - default-network
-  rabbitmq:
-    image: rabbitmq:3.8.3-management
-    container_name: rabbitmq
-    restart: always
-    volumes:
-      #- ./rabbitmq:/var/lib/rabbitmq
-      - ./log/rabbitmq:/var/log/rabbitmq:rw
-      - ./rabbitmq/mnesia:/var/lib/rabbitmq/mnesia:rw
-    environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
-    ports:
-      - 15672:15672
-      - 5672:5672
-    networks:
-      - default-network
+#  rabbitmq:
+#    image: rabbitmq:3.8.3-management
+#    container_name: rabbitmq
+#    restart: always
+#    volumes:
+#      #- ./rabbitmq:/var/lib/rabbitmq
+#      - ./log/rabbitmq:/var/log/rabbitmq:rw
+#      - ./rabbitmq/mnesia:/var/lib/rabbitmq/mnesia:rw
+#    environment:
+#      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+#      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+#    ports:
+#      - 15672:15672
+#      - 5672:5672
+#    networks:
+#      - default-network
 networks:
   default-network:
-    driver: bridhostge
+    driver: bridge
+
