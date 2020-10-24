@@ -1,33 +1,39 @@
-FROM php:7.4.11-fpm as php74
-# 切换源&&扩展
+FROM php:7.4.11-fpm as php74-fpm
+# 切换源
+#RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak
 RUN echo "deb http://mirrors.aliyun.com/debian/ buster main non-free contrib \n \
-deb-src http://mirrors.aliyun.com/debian/ buster main non-free contrib \n \
-deb http://mirrors.aliyun.com/debian-security buster/updates main \n \
-deb-src http://mirrors.aliyun.com/debian-security buster/updates main \n \
-deb http://mirrors.aliyun.com/debian/ buster-updates main non-free contrib \n \
-deb-src http://mirrors.aliyun.com/debian/ buster-updates main non-free contrib \n \
-deb http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib \n \
-deb-src http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib" > /etc/apt/sources.list \
-    && apt-get update \
-    && apt-get install -y \
+    deb-src http://mirrors.aliyun.com/debian/ buster main non-free contrib \n \
+    deb http://mirrors.aliyun.com/debian-security buster/updates main \n \
+    deb-src http://mirrors.aliyun.com/debian-security buster/updates main \n \
+    deb http://mirrors.aliyun.com/debian/ buster-updates main non-free contrib \n \
+    deb-src http://mirrors.aliyun.com/debian/ buster-updates main non-free contrib \n \
+    deb http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib \n \
+    deb-src http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib" > /etc/apt/sources.list
+# 安装扩展
+RUN apt-get update && apt-get install -y \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libmcrypt-dev \
+        libpng-dev \
         build-essential \
         libmagickcore-dev \
         libmagickwand-dev \
         imagemagick \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
-        libmcrypt-dev \
-        libpng-dev
-#        \
-#    && docker-php-ext-configure gd  --with-webp=/usr/include/webp --with-jpeg=/usr/include --with-freetype=/usr/include/freetype2/ \
-#    && docker-php-ext-install -j$(nproc) gd iconv  pdo_mysql  mysqli bcmath calendar exif gettext sockets dba  pcntl  shmop sysvmsg sysvsem sysvshm \
-#    && pecl install redis-3.1.6 \
-#    && pecl install imagick \
-#    && pecl install mcrypt \
-#    && docker-php-ext-enable redis imagick mcrypt
-#&& pecl install redis-5.1.1 \
+    && docker-php-ext-install -j$(nproc) \
+        iconv pdo_mysql  mysqli bcmath calendar exif gettext sockets \
+        dba pcntl shmop sysvmsg sysvsem sysvshm
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-install -j$(nproc) gd
+# 安装自定义插件 pecl: https://pecl.php.net/
+RUN pecl install mcrypt \
+    && pecl install imagick \
+    && pecl install redis-3.1.6 \
+    && pecl install xlswriter-1.3.6 \
+    && docker-php-ext-enable mcrypt imagick redis xlswriter
 # 安装易用扩展
-RUN apt-get install -y vim sudo
+RUN apt-get install -y vim sudo less git
+RUN echo "alias ll='ls \$LS_OPTIONS -l'" >>~/.bashrc
+#RUN source ~/.bashrc
 # 安装PHP composer
 RUN php -r "copy('https://install.phpcomposer.com/installer', 'composer-setup.php');" \
     && php composer-setup.php \

@@ -6,6 +6,7 @@ services:
     restart: always
     ports:
       - "80:80"
+      - "8080:8080"
       - "443:443"
     dns:
       - ${DOCKER_DNS}
@@ -50,9 +51,9 @@ services:
     restart: always
     volumes:
       - ./project:/var/www:rw
-      - ./php-fpm74/php.ini:/usr/local/etc/php/php.ini
-      - ./php-fpm74/php-fpm.conf:/usr/local/etc/php-fpm.conf
-      - ./php-fpm74/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - ./php74-fpm/php.ini:/usr/local/etc/php/php.ini
+      - ./php74-fpm/php-fpm.conf:/usr/local/etc/php-fpm.conf
+      - ./php74-fpm/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
     links:
       - mysql
       - redis
@@ -119,4 +120,3 @@ services:
 networks:
   default-network:
     driver: bridge
-

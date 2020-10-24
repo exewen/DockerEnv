@@ -1,5 +1,4 @@
-FROM php:7.0.13-fpm as php
-# 切换源&&新增ll
+FROM php:7.0.13-fpm as php-fpm
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak \
     && echo "deb http://mirrors.163.com/debian/ jessie main non-free contrib" >>/etc/apt/sources.list \
     && echo "deb http://mirrors.163.com/debian/ jessie-updates main non-free contrib" >>/etc/apt/sources.list \
@@ -25,16 +24,6 @@ RUN apt-get update && apt-get install -y \
         mbstring bcmath opcache xml simplexml sockets hash soap xmlwriter \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd
-# 安装易用扩展
-RUN apt-get install -y vim sudo \
-    && echo "alias ll='ls \$LS_OPTIONS -l'" >>~/.bashrc \
-    && source ~/.bashrc
-#安装 PHP composer
-RUN php -r "copy('https://install.phpcomposer.com/installer', 'composer-setup.php');" \
-    && php composer-setup.php \
-    && php -r "unlink('composer-setup.php');" \
-    && sudo mv composer.phar /usr/local/bin/composer \
-    && composer config -g repo.packagist composer https://packagist.phpcomposer.com
 # 安装imap扩展
 RUN apt-get update && apt-get install -y --no-install-recommends libc-client-dev libkrb5-dev \
         && rm -r /var/lib/apt/lists/* \
@@ -74,3 +63,13 @@ RUN mkdir -p /usr/src/php/ext/xlswriter \
 #    && echo 'xdebug' >> /usr/src/php-available-exts \
 #    && docker-php-ext-install xdebug
 #CMD ["php-fpm", "-F"]
+# 安装易用扩展
+RUN apt-get update && apt-get install -y vim sudo less git
+RUN echo "alias ll='ls \$LS_OPTIONS -l'" >>~/.bashrc
+#&& source ~/.bashrc
+#安装 PHP composer
+RUN php -r "copy('https://install.phpcomposer.com/installer', 'composer-setup.php');" \
+    && php composer-setup.php \
+    && php -r "unlink('composer-setup.php');" \
+    && sudo mv composer.phar /usr/local/bin/composer \
+    && composer config -g repo.packagist composer https://packagist.phpcomposer.com

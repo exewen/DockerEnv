@@ -1,0 +1,45 @@
+version: "3"
+services:
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "443:443"
+    dns:
+      - ${DOCKER_DNS}
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d/
+      - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf/fastcgi.conf:/etc/nginx/fastcgi.conf
+      - ./project:/var/www:rw
+      - ./nginx/ssl:/etc/nginx/ssl:rw
+      - ./log/nginx:/var/log/nginx:rw
+    environment:
+      - TZ=${NGINX_TZ}
+    links:
+      # 指定服务名称:别名(给了container_name就不需要别名 比如php74:fpm74)
+      - php74
+    networks:
+      - default-network
+  php74:
+    build: ./php74-fpm
+    container_name: fpm
+    restart: always
+    volumes:
+      - ./project:/var/www:rw
+      - ./php74-fpm/php.ini:/usr/local/etc/php/php.ini
+      - ./php74-fpm/php-fpm.conf:/usr/local/etc/php-fpm.conf
+      - ./php74-fpm/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
+    expose:
+      - "9000"
+    dns:
+      - ${DOCKER_DNS}
+    networks:
+      - default-network
+networks:
+  default-network:
+    driver: bridge
+
