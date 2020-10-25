@@ -29,9 +29,10 @@ RUN pecl install mcrypt \
     && pecl install xlswriter-1.3.6 \
     && docker-php-ext-enable mcrypt imagick redis xlswriter
 # 安装易用扩展
-RUN apt-get install -y vim sudo less git zip unzip
+RUN apt-get install -y vim sudo less git zip unzip lrzsz net-tools openssh-server
 RUN echo "alias ll='ls \$LS_OPTIONS -l'" >>~/.bashrc
 RUN /bin/bash -c "source ~/.bashrc"
+#RUN service ssh start && passwd root && 123456 #SSH手动启动
 # 安装PHP composer
 RUN php -r "copy('https://install.phpcomposer.com/installer', 'composer-setup.php');" \
     && php composer-setup.php \

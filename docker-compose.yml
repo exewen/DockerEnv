@@ -6,8 +6,8 @@ services:
     restart: always
     ports:
       - "80:80"
-      - "8080:8080"
       - "443:443"
+      - "2201:22"
     dns:
       - ${DOCKER_DNS}
     volumes:
@@ -37,9 +37,12 @@ services:
       - ./log/php-fpm:/var/log/php-fpm:rw
       - ./log/php:/var/log/php:rw
       - ./mnt:/mnt:rw
+      - ./php-fpm/ssh/sshd_config:/etc/ssh/sshd_config:rw
     links:
       - mysql
       - redis
+    ports:
+      - "2202:22"
     expose:
       - "9000"
     dns:
@@ -56,9 +59,12 @@ services:
       - ./php74-fpm/php-fpm.conf:/usr/local/etc/php-fpm.conf
       - ./php74-fpm/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
       - ./mnt:/mnt:rw
+      - ./php74-fpm/ssh/sshd_config:/etc/ssh/sshd_config:rw
     links:
       - mysql
       - redis
+    ports:
+      - "2203:22"
     expose:
       - "9000"
     dns:
