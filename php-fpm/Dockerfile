@@ -65,8 +65,8 @@ RUN mkdir -p /usr/src/php/ext/xlswriter \
 #CMD ["php-fpm", "-F"]
 # 安装易用扩展
 RUN apt-get update && apt-get install -y vim sudo less git
-RUN echo "alias ll='ls \$LS_OPTIONS -l'" >>~/.bashrc
-#&& source ~/.bashrc
+RUN echo "alias ll='ls \$LS_OPTIONS -l'" >>~/.bashrc \
+    /bin/bash -c "source ~/.bashrc"
 #安装 PHP composer
 RUN php -r "copy('https://install.phpcomposer.com/installer', 'composer-setup.php');" \
     && php composer-setup.php \

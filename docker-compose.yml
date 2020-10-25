@@ -17,10 +17,10 @@ services:
       - ./project:/var/www:rw
       - ./nginx/ssl:/etc/nginx/ssl:rw
       - ./log/nginx:/var/log/nginx:rw
+      - ./mnt:/mnt:rw
     environment:
       - TZ=${NGINX_TZ}
     links:
-      # 指定服务名称:别名(给了container_name就不需要别名 比如php74:fpm74)
       - php
       - php74
     networks:
@@ -36,6 +36,7 @@ services:
       - ./php-fpm/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
       - ./log/php-fpm:/var/log/php-fpm:rw
       - ./log/php:/var/log/php:rw
+      - ./mnt:/mnt:rw
     links:
       - mysql
       - redis
@@ -54,6 +55,7 @@ services:
       - ./php74-fpm/php.ini:/usr/local/etc/php/php.ini
       - ./php74-fpm/php-fpm.conf:/usr/local/etc/php-fpm.conf
       - ./php74-fpm/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - ./mnt:/mnt:rw
     links:
       - mysql
       - redis
@@ -65,7 +67,7 @@ services:
       - default-network
   mysql:
     image: mysql:5.7
-    container_name: mysql57
+    container_name: mysql
     restart: always
     volumes:
       - ./mysql/conf/my.cnf:/etc/mysql/my.cnf

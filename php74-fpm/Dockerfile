@@ -1,15 +1,13 @@
 FROM php:7.4.11-fpm as php74-fpm
 # 切换源
-#RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak
-RUN echo "deb http://mirrors.aliyun.com/debian/ buster main non-free contrib \n \
-    deb-src http://mirrors.aliyun.com/debian/ buster main non-free contrib \n \
-    deb http://mirrors.aliyun.com/debian-security buster/updates main \n \
-    deb-src http://mirrors.aliyun.com/debian-security buster/updates main \n \
-    deb http://mirrors.aliyun.com/debian/ buster-updates main non-free contrib \n \
-    deb-src http://mirrors.aliyun.com/debian/ buster-updates main non-free contrib \n \
-    deb http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib \n \
-    deb-src http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib" > /etc/apt/sources.list
-# 安装扩展
+RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak \
+    && echo "deb http://mirrors.ustc.edu.cn/debian/ buster main" >>/etc/apt/sources.list \
+    && echo "deb-src http://mirrors.ustc.edu.cn/debian/ buster main" >>/etc/apt/sources.list \
+    && echo "deb http://mirrors.ustc.edu.cn/debian-security buster/updates main" >>/etc/apt/sources.list \
+    && echo "deb-src http://mirrors.ustc.edu.cn/debian-security buster/updates main" >>/etc/apt/sources.list \
+    && echo "deb http://mirrors.ustc.edu.cn/debian/ buster-updates main" >>/etc/apt/sources.list \
+    && echo "deb-src http://mirrors.ustc.edu.cn/debian/ buster-updates main" >>/etc/apt/sources.list
+## 安装扩展
 RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
@@ -32,8 +30,8 @@ RUN pecl install mcrypt \
     && docker-php-ext-enable mcrypt imagick redis xlswriter
 # 安装易用扩展
 RUN apt-get install -y vim sudo less git
-RUN echo "alias ll='ls \$LS_OPTIONS -l'" >>~/.bashrc
-#RUN source ~/.bashrc
+RUN echo "alias ll='ls \$LS_OPTIONS -l'" >>~/.bashrc \
+    /bin/bash -c "source ~/.bashrc"
 # 安装PHP composer
 RUN php -r "copy('https://install.phpcomposer.com/installer', 'composer-setup.php');" \
     && php composer-setup.php \

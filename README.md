@@ -16,7 +16,7 @@ docker-compose restart
 ~~~
 ### 进入容器
 ~~~
-docker exec -it php /bin/bash
+docker exec -it fpm /bin/bash
 ~~~
 ### 容器文件复制
 ~~~
@@ -24,6 +24,8 @@ docker cp fpm74:/usr/local/etc/php/php.ini-development D:\DockerEnv\php74-fpm\ph
 docker cp fpm74:/usr/local/etc/php-fpm.conf D:\DockerEnv\php74-fpm\php-fpm.conf
 docker cp fpm74:/usr/local/etc/php-fpm.d/www.conf D:\DockerEnv\php74-fpm\php-fpm.d\www.conf
 docker cp fpm74:/etc/apt/sources.list D:\sources.list
+# 源切换
+docker cp fpm:/etc/apt/sources.list D:\DockerEnv\php74-fpm\sources.list
 ~~~
 
 ### 推送H
@@ -32,4 +34,9 @@ docker tag dockerenv_nginx:latest exewen/nginx:1.18.0
 docker push exewen/nginx
 docker tag dockerenv_php:latest exewen/php-fpm:7.0.13
 docker push exewen/php-fpm
+~~~
+### 查看debian版本
+~~~
+cat /etc/issue
+cat /etc/apt/sources.list
 ~~~
