@@ -3,6 +3,7 @@ if not exist project mkdir project
 if not exist images mkdir images
 if not exist log\mysql mkdir log\mysql
 if not exist log\nginx mkdir log\nginx
+if not exist log\nginx\access mkdir log\nginx\access
 if not exist log\php mkdir log\php
 if not exist log\php-fpm mkdir log\php-fpm
 if not exist log\php74-fpm mkdir log\php74-fpm

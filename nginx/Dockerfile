@@ -19,5 +19,5 @@ RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak \
 #    && echo "deb-src http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib" >>/etc/apt/sources.list
 RUN apt-get update  && apt-get install -y \
     vim sudo less git
-RUN echo "alias ll='ls \$LS_OPTIONS -l'" >>~/.bashrc \
-    /bin/bash -c "source ~/.bashrc"
+RUN echo "alias ll='ls \$LS_OPTIONS -l'" >>~/.bashrc
+RUN /bin/bash -c "source ~/.bashrc"
